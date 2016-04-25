@@ -5,11 +5,9 @@
 var http = require('http');
 http.createServer(function (request, response) {
   response.writeHead(200, {'Content-Type': 'text/plain'});
-  response.write("This is before the end\n");
   response.end('Hello World\n');
-  response.write("This is after the end\n");
-}).listen(3000);
-console.log('Server running at http://<workspace-url>/');
+}).listen(1337, '127.0.0.1');
+console.log('Server running at http://127.0.0.1:1337/');
 
 //2.  We want to handle the http route GET / and POST / i.e. Home
      //if url == "/" && GET
