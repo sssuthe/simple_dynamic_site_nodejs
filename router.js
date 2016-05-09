@@ -1,3 +1,9 @@
+var Profile = require("./profile.js");
+
+
+
+
+
 // We want to handle the http route GET / and POST / i.e. Home
 function home(request, response)
 {
@@ -22,13 +28,30 @@ function user(request, response){
      if (username.length > 0){
          response.writeHead(200, {'Content-Type': 'text/plain'});
          response.write("Header\n");
-         response.write(username + "\n");
-         response.end('Footer\n');
-       //get json from Treehouse
+
+         //Get json from Treehouse
+         var studentProfile = new Profile(username);
          //on "end"
+         studentProfile.on("end", function(profileJSON){
             //show profile
-         //on "error"
-           //show error
+            //store the values which we need
+            var values = {
+                avatarUrl: profileJSON.gravatar_url,
+                username: profileJSON.profile_name,
+                badges: profileJSON.badges.length,
+                javaScriptPoints: profileJSON.points.JavaScript
+            }
+            //Simple response
+            response.write(values.username + " has " + values.badges + " badges\n");
+            response.end('Footer\n');
+         });
+
+         studentProfile.on("error", function(error){
+            //show error
+            response.write(error.message);
+            response.end('Footer\n');
+         });
+
            }
        }
 
